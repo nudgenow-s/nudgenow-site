@@ -1,271 +1,1802 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>NudgeNow — A Real Business System for Individuals</title>
-<link rel="icon/JPG" href="favicon.ico.JPG">
-<link rel="apple-touch-icon" href="favicon.ico.JPG">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUNO — 极简财务工具</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg:      #07080C;
+  --bg2:     #0B0D13;
+  --bg3:     #0F1119;
+  --glass:   rgba(255,255,255,0.03);
+  --glass2:  rgba(255,255,255,0.06);
+  --border:  rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --text:    #EEF2FF;
+  --text2:   rgba(238,242,255,0.5);
+  --text3:   rgba(238,242,255,0.25);
+  --gold:    #C9A84C;
+  --gold2:   #E8C97A;
+  --gold3:   rgba(201,168,76,0.12);
+  --blue:    #3B82F6;
+  --blue2:   #60A5FA;
+  --teal:    #2DD4BF;
+  --green:   #4ADE80;
+  --violet:  #A78BFA;
+  --orange:  #FB923C;
+  --glow-gold: rgba(201,168,76,0.15);
+  --glow-blue: rgba(59,130,246,0.12);
+  --font-display: 'DM Serif Display', serif;
+  --font-sans: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  margin: 0;
-  background: #f9fafb;
-  color: #111;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-header {
-  padding: 80px 20px 60px;
+/* ─── GRAIN OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ─── NAV ─── */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  background: rgba(7,8,12,0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  gap: 32px;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.nav-logo-mark {
+  width: 30px; height: 30px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: #07080C;
+  font-weight: 900;
+  letter-spacing: -1px;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.35);
+}
+.nav-logo-text {
+  font-family: var(--font-display);
+  font-size: 19px;
+  color: var(--text);
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  flex: 1;
+}
+.nav-links a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-cta-link {
+  background: linear-gradient(135deg, var(--gold), var(--gold2)) !important;
+  color: #07080C !important;
+  padding: 7px 18px;
+  border-radius: 20px;
+  font-weight: 700 !important;
+}
+
+.lang-switcher {
+  display: flex;
+  gap: 3px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 3px;
+}
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--text3);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-family: var(--font-sans);
+  letter-spacing: 0.5px;
+}
+.lang-btn:hover { color: var(--text2); }
+.lang-btn.active {
+  background: var(--glass2);
+  color: var(--gold2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  background: white;
+  padding: 140px 24px 100px;
+  position: relative;
+  overflow: hidden;
 }
 
-h1 {
+/* Ambient orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  top: -100px; left: 50%;
+  transform: translateX(-50%);
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%);
+  bottom: 0; right: 10%;
+}
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(167,139,250,0.06) 0%, transparent 70%);
+  bottom: 20%; left: 5%;
+}
+
+/* Grid lines bg */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(201,168,76,0.25);
+  background: rgba(201,168,76,0.06);
+  border-radius: 32px;
+  padding: 6px 18px 6px 10px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+.eyebrow-dot {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: blink 2.5s ease-in-out infinite;
+}
+.eyebrow-text {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold2);
+  font-family: var(--font-mono);
+}
+@keyframes blink {
+  0%,100% { opacity: 1; box-shadow: 0 0 6px var(--gold); }
+  50% { opacity: 0.3; box-shadow: none; }
+}
+
+.hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 9vw, 112px);
+  line-height: 1.0;
+  letter-spacing: -2px;
+  max-width: 900px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+  animation: fadeSlideUp 0.9s cubic-bezier(0.22,1,0.36,1) both;
+}
+.hero-h1 .line-plain {
+  display: block;
+  background: linear-gradient(170deg, #fff 40%, rgba(255,255,255,0.45));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-h1 .line-gold {
+  display: block;
+  background: linear-gradient(135deg, var(--gold) 20%, var(--gold2) 60%, #fff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: italic;
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hero-sub {
+  font-size: clamp(15px, 1.8vw, 18px);
+  color: var(--text2);
+  max-width: 520px;
+  line-height: 1.8;
+  margin-bottom: 52px;
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+  animation: fadeSlideUp 0.9s 0.15s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 96px;
+  position: relative;
+  z-index: 1;
+  animation: fadeSlideUp 0.9s 0.3s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #07080C;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 32px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.3px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 32px rgba(201,168,76,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 40px rgba(201,168,76,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.btn-ghost {
+  background: var(--glass);
+  color: var(--text);
+  border: 1px solid var(--border2);
+  padding: 14px 32px;
+  border-radius: 32px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, border-color 0.2s;
+  backdrop-filter: blur(8px);
+}
+.btn-ghost:hover {
+  background: var(--glass2);
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* ─── HERO CARD DECK ─── */
+.card-deck-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  animation: fadeSlideUp 0.9s 0.45s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.card-deck-viewport {
+  position: relative;
+  height: 280px;
+  perspective: 1200px;
+  cursor: grab;
+}
+.card-deck-viewport:active { cursor: grabbing; }
+
+/* Stacked cards behind */
+.preview-card {
+  position: absolute;
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border2);
+  transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Card z-layers & stack effect */
+.preview-card:nth-child(3) {
+  transform: translateY(28px) scale(0.88) rotateX(4deg);
+  z-index: 1;
+  opacity: 0.45;
+  filter: blur(0.5px);
+}
+.preview-card:nth-child(2) {
+  transform: translateY(14px) scale(0.94) rotateX(2deg);
+  z-index: 2;
+  opacity: 0.7;
+}
+.preview-card:nth-child(1) {
+  transform: translateY(0) scale(1) rotateX(0deg);
+  z-index: 3;
+  opacity: 1;
+}
+
+/* When cycling — animate out left */
+.preview-card.swipe-out {
+  transform: translateX(-120%) rotate(-8deg) !important;
+  opacity: 0 !important;
+  transition: transform 0.4s cubic-bezier(0.4,0,1,1), opacity 0.3s ease !important;
+}
+
+.preview-card-inner {
+  padding: 28px;
+  height: 248px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+
+/* App-specific gradients */
+.card-station { background: linear-gradient(145deg, #0A1628 0%, #0d1f3c 60%, #091428 100%); }
+.card-retail  { background: linear-gradient(145deg, #081A0E 0%, #0d2b16 60%, #071508 100%); }
+.card-beauty  { background: linear-gradient(145deg, #140820 0%, #220d34 60%, #100619 100%); }
+.card-food    { background: linear-gradient(145deg, #1A0C06 0%, #2c150a 60%, #150904 100%); }
+
+.card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card-icon {
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: #07080C;
+  font-weight: 900;
+}
+.icon-station { background: linear-gradient(135deg, #4A9EFF, #1e6abf); box-shadow: 0 4px 16px rgba(74,158,255,0.35); }
+.icon-retail  { background: linear-gradient(135deg, #4ADE80, #16a34a); box-shadow: 0 4px 16px rgba(74,222,128,0.35); }
+.icon-beauty  { background: linear-gradient(135deg, #A78BFA, #7c3aed); box-shadow: 0 4px 16px rgba(167,139,250,0.35); }
+.icon-food    { background: linear-gradient(135deg, #FB923C, #c2410c); box-shadow: 0 4px 16px rgba(251,146,60,0.35); }
+
+.card-badge-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 500;
+  border: 1px solid;
+}
+.pill-blue   { color: #60A5FA; border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.08); }
+.pill-green  { color: #4ADE80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08); }
+.pill-violet { color: #A78BFA; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); }
+.pill-orange { color: #FB923C; border-color: rgba(251,146,60,0.3); background: rgba(251,146,60,0.08); }
+
+.card-metric-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+.card-metric-value {
+  font-family: var(--font-display);
   font-size: 42px;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+.val-blue   { color: #60A5FA; }
+.val-green  { color: #4ADE80; }
+.val-violet { color: #A78BFA; }
+.val-orange { color: #FB923C; }
+
+.card-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+}
+.card-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-bar-label {
+  font-size: 9px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  width: 60px;
+  flex-shrink: 0;
+}
+.card-bar-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.card-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+.card-title-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.card-app-name {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.card-app-desc {
+  font-size: 11px;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+/* Swipe hint */
+.deck-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+.deck-dots {
+  display: flex;
+  gap: 6px;
+}
+.deck-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border2);
+  transition: background 0.3s, transform 0.3s;
+  cursor: pointer;
+}
+.deck-dot.active {
+  background: var(--gold);
+  transform: scale(1.4);
+}
+.deck-swipe-label {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+}
+
+/* ─── SECTION BASE ─── */
+section { padding: 100px 24px; }
+.container { max-width: 1120px; margin: 0 auto; }
+
+.sec-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sec-label::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--gold);
+  opacity: 0.5;
+}
+
+.sec-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5.5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+  background: linear-gradient(160deg, #fff 30%, rgba(255,255,255,0.45));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.sec-desc {
+  font-size: 16px;
+  color: var(--text2);
+  max-width: 560px;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ─── TAGLINE STRIP ─── */
+.tagline-section {
+  padding: 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+.tagline-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.tagline-item {
+  padding: 48px 40px;
+  border-right: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.tagline-item:last-child { border-right: none; }
+.tagline-item::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tagline-item:hover { background: rgba(201,168,76,0.03); }
+.tagline-item:hover::before { opacity: 0.4; }
+
+.tg-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--gold);
+  opacity: 0.6;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+.tg-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.tg-sub {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* ─── APPS SECTION ─── */
+.apps-section { overflow: hidden; }
+.apps-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+.apps-header .sec-label { justify-content: center; }
+.apps-header .sec-label::before { display: none; }
+.apps-header .sec-desc { margin: 0 auto; }
+
+/* Full app cards track */
+.app-cards-outer {
+  position: relative;
+}
+
+.app-cards-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 40px 48px;
+  scrollbar-width: none;
+}
+.app-cards-track::-webkit-scrollbar { display: none; }
+
+.app-card {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s;
+  cursor: pointer;
+}
+.app-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(201,168,76,0.2);
+}
+
+.app-card-top {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+}
+.app-card-top::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+}
+
+.app-card-glyph {
+  position: absolute;
+  top: -20px; right: -20px;
+  font-family: var(--font-display);
+  font-size: 120px;
+  opacity: 0.06;
+  color: #fff;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+
+.card-app-icon {
+  width: 48px; height: 48px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: #07080C;
+  font-weight: 900;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 12px;
+}
+
+.card-top-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}
+.card-top-name {
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  margin-top: 2px;
+}
+
+.app-card-body {
+  padding: 20px;
+  border-top: 1px solid var(--border);
+}
+.app-card-sub {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.65;
   margin-bottom: 16px;
 }
-
-p {
-  font-size: 18px;
-  color: #555;
-  line-height: 1.6;
+.app-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.f-tag {
+  font-size: 10px;
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: var(--glass2);
+  border: 1px solid var(--border);
+  color: var(--text3);
+  font-family: var(--font-mono);
+  letter-spacing: 0.3px;
 }
 
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
+.app-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 0;
+  padding-bottom: 8px;
+}
+.app-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border2);
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+.app-dot.active {
+  background: var(--gold);
+  transform: scale(1.5);
 }
 
-.section {
-  margin: 80px 0;
+/* ─── PHILOSOPHY ─── */
+.philosophy-section {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+}
+.phil-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 80px;
   align-items: center;
 }
+.big-num {
+  font-family: var(--font-display);
+  font-size: clamp(100px, 14vw, 160px);
+  line-height: 0.85;
+  letter-spacing: -8px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 50%, rgba(201,168,76,0.2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  font-style: italic;
+}
 
-.section img {
-  width: 100%;
-  max-width: 420px;
+.stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.stat-row {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.stat-row:first-child { padding-top: 0; }
+.stat-row:last-child { border-bottom: none; }
+.stat-icon-box {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: var(--glass2);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+.stat-row:hover .stat-icon-box { border-color: rgba(201,168,76,0.3); }
+.stat-h { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.stat-p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+/* ─── PRICING ─── */
+.pricing-section { text-align: center; }
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.price-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.price-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--gold3), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.price-card:hover { border-color: rgba(201,168,76,0.2); transform: translateY(-4px); }
+.price-card:hover::before { opacity: 1; }
+
+.price-card.featured {
+  border-color: rgba(201,168,76,0.35);
+  background: linear-gradient(160deg, rgba(201,168,76,0.06) 0%, var(--bg3) 60%);
+}
+.price-card.featured::before { opacity: 0.5; }
+
+.featured-badge {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: linear-gradient(135deg, var(--gold), var(--gold2));
+  color: #07080C;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-family: var(--font-mono);
+}
+
+.p-type {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.p-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.p-amount {
+  font-family: var(--font-display);
+  font-size: 48px;
+  letter-spacing: -3px;
+  color: var(--text);
+  line-height: 1;
+  margin: 16px 0;
+}
+.p-amount sub {
+  font-size: 16px;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  color: var(--text2);
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+.p-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 24px;
+}
+.p-features li {
+  font-size: 13px;
+  color: var(--text2);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.p-features li::before {
+  content: '—';
+  color: var(--gold);
+  opacity: 0.7;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+/* trust bar */
+.trust-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 48px;
+  padding: 20px 32px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+}
+.trust-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text2);
+}
+.trust-icon { font-size: 16px; }
+.trust-divider {
+  width: 1px; height: 20px;
+  background: var(--border2);
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 72px 24px 40px;
+}
+.footer-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 56px;
+}
+.footer-brand-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 260px;
+  margin-top: 16px;
+  font-weight: 300;
+}
+.footer-col h5 {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text3);
+  margin-bottom: 20px;
+}
+.footer-col a {
   display: block;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 13px;
+  margin-bottom: 11px;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--text); }
+.footer-bottom {
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text3);
+  font-family: var(--font-mono);
+}
+
+/* ─── DIVIDER ─── */
+.gold-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+  max-width: 600px;
   margin: 0 auto;
 }
 
-.card {
-  background: white;
-  padding: 48px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+/* ─── FADE UP ─── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
+.fade-up.visible { opacity: 1; transform: none; }
+.fade-up.delay-1 { transition-delay: 0.1s; }
+.fade-up.delay-2 { transition-delay: 0.2s; }
+.fade-up.delay-3 { transition-delay: 0.3s; }
 
-h2 {
-  margin-top: 0;
-  font-size: 26px;
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .phil-grid { grid-template-columns: 1fr; gap: 48px; }
+  .tagline-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+  .trust-bar { flex-wrap: wrap; gap: 16px; }
+  .trust-divider { display: none; }
+  .nav { padding: 0 20px; }
 }
-
-.cta {
-  background: white;
-  text-align: center;
-  padding: 100px 20px;
-}
-
-button {
-  margin-top: 32px;
-  padding: 16px 40px;
-  font-size: 18px;
-  background: black;
-  color: white;
-  border: none;
-  border-radius: 999px;
-}
-
-footer {
-  text-align: center;
-  padding: 40px 20px;
-  color: #999;
-}
-
-/* 📱 Mobile layout */
-@media (max-width: 768px) {
-  h1 {
-    font-size: 32px;
-  }
-
-  .section {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  .card {
-    padding: 32px;
-  }
-
-  header {
-    padding: 60px 20px 40px;
-  }
-}
-  /* ===== Mobile fix ===== */
-@media (max-width: 768px) {
-  header {
-    padding: 48px 20px;
-    text-align: left;
-  }
-
-  h1 {
-    font-size: 36px;
-  }
-
-  p {
-    font-size: 16px;
-  }
-
-  .section {
-    flex-direction: column;
-    gap: 32px;
-    margin: 48px auto;
-  }
-
-  .section img {
-    width: 100%;
-    max-width: 420px;
-  }
-
-  .card {
-    padding: 24px;
-  }
-
-  .cta {
-    padding: 64px 20px;
-  }
-
-  button {
-    width: 100%;
-    max-width: 360px;
-  }
-}
-  /* ===== NudgeNow mobile rescue ===== */
-@media (max-width: 768px) {
-
-  /* 1️⃣ 解除“中间一条”的 1000px 牢笼 */
-  .section {
-    max-width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 32px;
-    margin: 48px auto;
-  }
-
-  /* 2️⃣ 所有图片在手机上都不准溢出中轴 */
-  .section img,
-  .cta img {
-    width: 100%;
-    max-width: 360px;
-    margin: 0 auto;
-    display: block;
-  }
-
-  /* 3️⃣ Hero 区从“PPT”变成“产品页” */
-  header {
-    text-align: left;
-    padding: 48px 20px;
-  }
-
-  h1 {
-    font-size: 36px;
-    line-height: 1.15;
-  }
-
-  /* 4️⃣ 卡片不要像漂浮气泡一样挤在中间 */
-  .card {
-    padding: 24px;
-    border-radius: 20px;
-  }
-
-  /* 5️⃣ CTA 按钮区拉满宽度，像真正的行动按钮 */
-  .cta {
-    padding: 64px 20px;
-    text-align: center;
-  }
-
-  .cta button {
-    width: 100%;
-    max-width: 360px;
-  }
+@media (max-width: 600px) {
+  .footer-top { grid-template-columns: 1fr; }
+  .tagline-item { padding: 32px 24px; }
+  .app-cards-track { padding: 8px 20px 48px; }
+  .card-deck-viewport { height: 260px; }
+  .hero { padding: 120px 20px 80px; }
 }
 </style>
 </head>
-
 <body>
 
-<header>
-  <h1>NudgeNow</h1>
-  <p>A Real Business System for Individual Business Owners</p>
-  <p>为个体经营者打造的一套真实经营系统</p>
-</header>
+<!-- NAV -->
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-mark">N</div>
+    <span class="nav-logo-text">NUNO</span>
+  </a>
+  <div class="nav-links">
+    <a href="#apps" class="i18n" data-key="nav_apps">产品</a>
+    <a href="#why" class="i18n" data-key="nav_why">理念</a>
+    <a href="#pricing" class="i18n" data-key="nav_pricing">定价</a>
+    <a href="#pricing" class="nav-cta-link i18n" data-key="nav_start">免费开始</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('vi')">VI</button>
+  </div>
+</nav>
 
-<div class="container">
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
-  <div class="section">
-    <img src="assets/hero.png.jpg">
-    <div class="card">
-      <h2>Business Reality Scan<br>经营体检系统</h2>
-      <p>Know if you are actually making money — not by feeling, but by data.</p>
-      <p>你是否赚钱，不靠感觉，而靠真实数据。</p>
-    </div>
+  <div class="hero-eyebrow">
+    <div class="eyebrow-dot"></div>
+    <span class="eyebrow-text i18n" data-key="badge">极简财务工具</span>
   </div>
 
-  <div class="section">
-    <div class="card">
-      <h2>Industry Comparison<br>行业对比视图</h2>
-      <p>See where your business stands compared to others like you.</p>
-      <p>你在同行中的位置，一眼就知道。</p>
-    </div>
-    <img src="assets/compare.png.jpg">
+  <h1 class="hero-h1">
+    <span class="line-plain i18n" data-key="hero_h1_1">复杂变</span>
+    <span class="line-gold i18n" data-key="hero_h1_2">简单</span>
+  </h1>
+
+  <p class="hero-sub i18n" data-key="hero_sub">
+    你不需要懂财务逻辑——水獭替你计算一切。从生存红线到库存毛利，数字自动跑，你只管做生意。
+  </p>
+
+  <div class="hero-ctas">
+    <a href="#apps" class="btn-gold i18n" data-key="hero_cta1">探索产品 →</a>
+    <a href="#pricing" class="btn-ghost i18n" data-key="hero_cta2">查看定价</a>
   </div>
 
-  <div class="section">
-    <img src="assets/course.png.jpg">
-    <div class="card">
-      <h2>Business Thinking Course<br>经营认知课程</h2>
-      <p>Learn the real language of business taught in top business schools.</p>
-      <p>你第一次接触真正的“商学院那套”。</p>
+  <!-- CARD DECK PREVIEW -->
+  <div class="card-deck-section">
+    <div class="card-deck-viewport" id="deckViewport">
+
+      <!-- Card C: Beauty (back) -->
+      <div class="preview-card card-beauty" data-card-index="2">
+        <div class="preview-card-inner">
+          <div class="card-top-row">
+            <div class="card-icon icon-beauty">N</div>
+            <div class="card-badge-pill pill-violet i18n" data-key="deck_badge3">美业版</div>
+          </div>
+          <div>
+            <div class="card-metric-label i18n" data-key="deck_label3">综合净利润</div>
+            <div class="card-metric-value val-violet">¥8,420</div>
+          </div>
+          <div class="card-bars">
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_staff">员工提成</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:55%;background:#A78BFA;"></div></div>
+            </div>
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_channel">渠道成本</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:30%;background:#A78BFA;"></div></div>
+            </div>
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_material">耗材成本</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:70%;background:#A78BFA;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card B: Retail (middle) -->
+      <div class="preview-card card-retail" data-card-index="1">
+        <div class="preview-card-inner">
+          <div class="card-top-row">
+            <div class="card-icon icon-retail">N</div>
+            <div class="card-badge-pill pill-green i18n" data-key="deck_badge2">零售版</div>
+          </div>
+          <div>
+            <div class="card-metric-label i18n" data-key="deck_label2">今日毛利</div>
+            <div class="card-metric-value val-green">¥4,280</div>
+          </div>
+          <div class="card-bars">
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_sales">销售额</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:82%;background:#4ADE80;"></div></div>
+            </div>
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_cost">成本</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:38%;background:#4ADE80;"></div></div>
+            </div>
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_margin">毛利率</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:62%;background:#4ADE80;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card A: Station (front / active) -->
+      <div class="preview-card card-station" data-card-index="0">
+        <div class="preview-card-inner">
+          <div class="card-top-row">
+            <div class="card-icon icon-station">N</div>
+            <div class="card-badge-pill pill-blue i18n" data-key="deck_badge1">能量站</div>
+          </div>
+          <div>
+            <div class="card-metric-label i18n" data-key="deck_label1">每日生存红线</div>
+            <div class="card-metric-value val-blue">¥12,800</div>
+          </div>
+          <div class="card-bars">
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_rent">租金</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:40%;background:#60A5FA;"></div></div>
+            </div>
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_labor">人工</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:65%;background:#60A5FA;"></div></div>
+            </div>
+            <div class="card-bar-row">
+              <div class="card-bar-label i18n" data-key="deck_bar_other">其他</div>
+              <div class="card-bar-track"><div class="card-bar-fill" style="width:25%;background:#60A5FA;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /viewport -->
+
+    <div class="deck-hint">
+      <div class="deck-swipe-label i18n" data-key="deck_hint">滑动查看</div>
+      <div class="deck-dots" id="deckDots">
+        <div class="deck-dot active" onclick="goToCard(0)"></div>
+        <div class="deck-dot" onclick="goToCard(1)"></div>
+        <div class="deck-dot" onclick="goToCard(2)"></div>
+      </div>
+    </div>
+  </div><!-- /card-deck-section -->
+</section>
+
+<!-- TAGLINE -->
+<div class="tagline-section">
+  <div class="tagline-grid container" style="max-width:100%;padding:0 40px;">
+    <div class="tagline-item fade-up">
+      <div class="tg-num">01</div>
+      <div class="tg-title i18n" data-key="tag1_title">不需要会计学位</div>
+      <div class="tg-sub i18n" data-key="tag1_sub">打开即用，数字自动算好，你只看结果就够了。</div>
+    </div>
+    <div class="tagline-item fade-up delay-1">
+      <div class="tg-num">02</div>
+      <div class="tg-title i18n" data-key="tag2_title">生意数据，随时在手</div>
+      <div class="tg-sub i18n" data-key="tag2_sub">无需安装，直接用，数据永远同步。</div>
+    </div>
+    <div class="tagline-item fade-up delay-2">
+      <div class="tg-num">03</div>
+      <div class="tg-title i18n" data-key="tag3_title">从零到清晰，几分钟完成</div>
+      <div class="tg-sub i18n" data-key="tag3_sub">录入成本，系统帮你算红线、毛利、提成、库存价值。</div>
     </div>
   </div>
-
-  <div class="section">
-    <div class="card">
-      <h2>Your Business Dashboard<br>我的经营仪表盘</h2>
-      <p>Three numbers that tell you if your business is getting healthier.</p>
-      <p>三个数字，让你知道自己是在变好还是在流血。</p>
-    </div>
-    <img src="assets/dashboard.png.jpg">
-  </div>
-
 </div>
 
-<img src="assets/RaaS.png.jpg" style="width:100%;display:block;">
+<div class="gold-line" style="margin:0;max-width:100%;"></div>
 
-<div class="cta">
-  <h2>Stop guessing. Start seeing.</h2>
-  <p>不要再靠感觉做生意</p>
-  <button onclick="location.href='scan.html'">Start My Reality Scan</button>
-</div>
+<!-- APPS -->
+<section class="apps-section" id="apps">
+  <div class="container">
+    <div class="apps-header fade-up">
+      <div class="sec-label i18n" data-key="apps_label">四款工具</div>
+      <h2 class="sec-title i18n" data-key="apps_title">为你的行业<br>精准打造</h2>
+      <p class="sec-desc i18n" data-key="apps_desc">无论零售、美业还是餐饮，水獭用你听得懂的语言把复杂财务说清楚。</p>
+    </div>
+  </div>
 
-<footer style="margin-top: 60px; padding: 40px 20px; border-top: 1px dashed #e0e0e0; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
-    <p style="font-size: 0.75rem; color: #bdc3c7; letter-spacing: 2px; margin-bottom: 15px; text-transform: uppercase;">
-        © 2026 NUDGENOW. ALL RIGHTS RESERVED.
-    </p>
-    <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
-        <span style="font-size: 0.9rem; color: #7f8c8d;">
-            Architecture by <strong style="color: #2c3e50;">NudgeNow Logic</strong>
-        </span>
-        <a href="mailto:hi@nudgenow.xyz" style="font-size: 0.9rem; color: #3498db; text-decoration: none; border-bottom: 1px solid #3498db; padding-bottom: 2px; transition: all 0.3s;">
-            Contact Consultant →
+  <div class="app-cards-outer">
+    <div class="app-cards-track" id="appTrack">
+
+      <!-- Station -->
+      <div class="app-card">
+        <div class="app-card-top card-station">
+          <div class="app-card-glyph">S</div>
+          <div class="card-app-icon icon-station">N</div>
+          <div class="card-top-label">OTTER STATION</div>
+          <div class="card-top-name i18n" data-key="app1_name">水獭能量站</div>
+        </div>
+        <div class="app-card-body">
+          <div class="app-card-sub i18n" data-key="app1_sub">知道每月最少要赚多少，才能活下去——这比会计报表更重要。</div>
+          <div class="app-features">
+            <span class="f-tag i18n" data-key="app1_f1">每日生存红线</span>
+            <span class="f-tag i18n" data-key="app1_f2">净利润计算</span>
+            <span class="f-tag i18n" data-key="app1_f3">盈亏临界点</span>
+            <span class="f-tag i18n" data-key="app1_f4">投资回报率</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retail -->
+      <div class="app-card">
+        <div class="app-card-top card-retail">
+          <div class="app-card-glyph">R</div>
+          <div class="card-app-icon icon-retail">N</div>
+          <div class="card-top-label">OTTERKEEPER</div>
+          <div class="card-top-name i18n" data-key="app2_name">獭掌柜·零售版</div>
+        </div>
+        <div class="app-card-body">
+          <div class="app-card-sub i18n" data-key="app2_sub">卖出一件，库存自动减一件，毛利自动算出来。</div>
+          <div class="app-features">
+            <span class="f-tag i18n" data-key="app2_f1">智能库存</span>
+            <span class="f-tag i18n" data-key="app2_f2">辅助定价</span>
+            <span class="f-tag i18n" data-key="app2_f3">毛利率实时</span>
+            <span class="f-tag i18n" data-key="app2_f4">库存价值</span>
+            <span class="f-tag i18n" data-key="app2_f5">贡献利润排行</span>
+            <span class="f-tag i18n" data-key="app2_f6">临期货品提醒</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Beauty -->
+      <div class="app-card">
+        <div class="app-card-top card-beauty">
+          <div class="app-card-glyph">B</div>
+          <div class="card-app-icon icon-beauty">N</div>
+          <div class="card-top-label">OTTERKEEPER</div>
+          <div class="card-top-name i18n" data-key="app3_name">獭掌柜·美业版</div>
+        </div>
+        <div class="app-card-body">
+          <div class="app-card-sub i18n" data-key="app3_sub">员工提成、获客成本、库存智能精确到ml，每单全自动跑出净利润。</div>
+          <div class="app-features">
+            <span class="f-tag i18n" data-key="app3_f1">员工提成</span>
+            <span class="f-tag i18n" data-key="app3_f2">获客成本</span>
+            <span class="f-tag i18n" data-key="app3_f3">精细化成本计算</span>
+            <span class="f-tag i18n" data-key="app3_f4">自动减库存</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Food -->
+      <div class="app-card">
+        <div class="app-card-top card-food">
+          <div class="app-card-glyph">F</div>
+          <div class="card-app-icon icon-food">N</div>
+          <div class="card-top-label">OTTERKEEPER</div>
+          <div class="card-top-name i18n" data-key="app4_name">獭掌柜·餐饮版</div>
+        </div>
+        <div class="app-card-body">
+          <div class="app-card-sub i18n" data-key="app4_sub">餐厅的每一分钱都看清楚。</div>
+          <div class="app-features">
+            <span class="f-tag i18n" data-key="app4_f1">BOM配方</span>
+            <span class="f-tag i18n" data-key="app4_f2">精准毛利</span>
+            <span class="f-tag i18n" data-key="app4_f3">外卖成本</span>
+            <span class="f-tag i18n" data-key="app4_f4">投流成本</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="app-dots" id="appDots">
+      <div class="app-dot active" onclick="scrollAppTo(0)"></div>
+      <div class="app-dot" onclick="scrollAppTo(1)"></div>
+      <div class="app-dot" onclick="scrollAppTo(2)"></div>
+      <div class="app-dot" onclick="scrollAppTo(3)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philosophy-section" id="why">
+  <div class="container">
+    <div class="phil-grid">
+      <div class="fade-up">
+        <div class="sec-label i18n" data-key="phil_label">水獭的理念</div>
+        <div class="big-num">4</div>
+        <h2 class="sec-title i18n" data-key="phil_title">款工具<br>一个信念</h2>
+        <p class="sec-desc i18n" data-key="phil_desc">财务不该是只有专业人士才能读懂的密码。每个做生意的人，都有权利看清楚自己的钱去哪了。</p>
+      </div>
+      <div class="fade-up delay-1">
+        <div class="stats-list">
+          <div class="stat-row">
+            <div class="stat-icon-box">⚡</div>
+            <div>
+              <div class="stat-h i18n" data-key="stat1_title">零配置上手</div>
+              <div class="stat-p i18n" data-key="stat1_desc">不需要培训，不需要会计知识，打开填数字，结果立刻出来。</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-icon-box">🔄</div>
+            <div>
+              <div class="stat-h i18n" data-key="stat2_title">实时联动数据</div>
+              <div class="stat-p i18n" data-key="stat2_desc">销售即录入，库存即扣减，毛利即更新。所有数据环环相扣，从不过期。</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-icon-box">🏦</div>
+            <div>
+              <div class="stat-h i18n" data-key="stat3_title">全球支付</div>
+              <div class="stat-p i18n" data-key="stat3_desc">支持订阅，不获取您的手机号与实名信息，隐私保护，海内外通用。</div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-icon-box">📱</div>
+            <div>
+              <div class="stat-h i18n" data-key="stat4_title">无需安装</div>
+              <div class="stat-p i18n" data-key="stat4_desc">浏览器直开，APP体验。iOS、Android、桌面全平台兼容。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="container">
+    <div class="fade-up">
+      <div class="sec-label" style="justify-content:center;" ><span class="i18n" data-key="pricing_label">定价</span></div>
+      <h2 class="sec-title i18n" data-key="pricing_title">清晰透明<br>按需订阅</h2>
+      <p class="sec-desc" style="margin:0 auto;" ><span class="i18n" data-key="pricing_desc">所有产品均支持免费试用 · 安全支付 · 随时取消</span></p>
+    </div>
+
+    <div class="pricing-grid fade-up delay-1">
+      <!-- Plan 1 -->
+      <div class="price-card">
+        <div class="p-type i18n" data-key="plan1_label">基础版</div>
+        <div class="p-name i18n" data-key="plan1_name">水獭能量站</div>
+        <div class="p-amount">$9<sub class="i18n" data-key="per_month"> /月</sub></div>
+        <ul class="p-features">
+          <li class="i18n" data-key="plan1_f1">每日生存红线计算</li>
+          <li class="i18n" data-key="plan1_f2">极简交互</li>
+          <li class="i18n" data-key="plan1_f3">数据导出（Excel/CSV）</li>
+          <li class="i18n" data-key="plan1_f4">多语言界面</li>
+        </ul>
+        <a href="#" class="btn-ghost" style="width:100%;justify-content:center;font-size:13px;">
+          <span class="i18n" data-key="cta_try">免费试用 14 天</span>
         </a>
+      </div>
+
+      <!-- Plan 2 featured -->
+      <div class="price-card featured">
+        <div class="featured-badge i18n" data-key="plan2_label">最受欢迎</div>
+        <div class="p-type" style="color:var(--gold);"><span class="i18n" data-key="plan2_label">最受欢迎</span></div>
+        <div class="p-name i18n" data-key="plan2_name">獭掌柜套装</div>
+        <div class="p-amount">$19<sub class="i18n" data-key="per_month"> /月</sub></div>
+        <ul class="p-features">
+          <li class="i18n" data-key="plan2_f1">零售 / 美业 / 餐饮 任选一款</li>
+          <li class="i18n" data-key="plan2_f2">库存进销自动联动</li>
+          <li class="i18n" data-key="plan2_f3">毛利实时计算</li>
+          <li class="i18n" data-key="plan2_f4">员工提成 & BOM & 获客成本</li>
+          <li class="i18n" data-key="plan2_f5">辅助录入库存</li>
+        </ul>
+        <a href="#" class="btn-gold" style="width:100%;justify-content:center;">
+          <span class="i18n" data-key="cta_start">立即开始</span>
+        </a>
+      </div>
+
+      <!-- Plan 3 -->
+      <div class="price-card">
+        <div class="p-type i18n" data-key="plan3_label">全家桶</div>
+        <div class="p-name i18n" data-key="plan3_name">水獭全系</div>
+        <div class="p-amount">$39<sub class="i18n" data-key="per_month"> /月</sub></div>
+        <ul class="p-features">
+          <li class="i18n" data-key="plan3_f1">全部 4 款 PWA</li>
+          <li class="i18n" data-key="plan3_f2">跨店数据汇总</li>
+          <li class="i18n" data-key="plan3_f3">数据导出 (CSV/PDF)</li>
+          <li class="i18n" data-key="plan3_f4">专属客服</li>
+        </ul>
+        <a href="#" class="btn-ghost" style="width:100%;justify-content:center;font-size:13px;">
+          <span class="i18n" data-key="cta_try">免费试用 14 天</span>
+        </a>
+      </div>
+
+      <!-- Plan 4 team -->
+      <div class="price-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;">
+        <div style="font-size:36px;">🤝</div>
+        <div class="p-name i18n" data-key="plan4_name">连锁 / 团队版</div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.6;" class="i18n" data-key="plan4_sub">多门店、多员工账号，定制化接入，联系我们获取报价。</p>
+        <a href="mailto:hello@nuno.app" class="btn-ghost" style="font-size:13px;">
+          <span class="i18n" data-key="cta_contact">联系我们</span>
+        </a>
+      </div>
     </div>
+
+    <div class="trust-bar fade-up delay-2">
+      <div class="trust-pill">
+        <span class="trust-icon">🔒</span>
+        <span class="i18n" data-key="trust1">Stripe 安全支付</span>
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-pill">
+        <span class="trust-icon">🏦</span>
+        <span class="i18n" data-key="trust2">美国银行开户验证</span>
+      </div>
+      <div class="trust-divider"></div>
+      <div class="trust-pill">
+        <span class="trust-icon">✨</span>
+        <span class="i18n" data-key="trust3">随时取消，无隐藏费用</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <a href="#" class="nav-logo" style="text-decoration:none;">
+          <div class="nav-logo-mark">N</div>
+          <span class="nav-logo-text">NUNO</span>
+        </a>
+        <p class="footer-brand-desc i18n" data-key="footer_desc">复杂变简单。为每一个认真做生意的人，打造最贴心的财务工具。</p>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-key="footer_products">产品</h5>
+        <a href="#" class="i18n" data-key="app1_name">水獭能量站</a>
+        <a href="#" class="i18n" data-key="app2_name">獭掌柜·零售版</a>
+        <a href="#" class="i18n" data-key="app3_name">獭掌柜·美业版</a>
+        <a href="#" class="i18n" data-key="app4_name">獭掌柜·餐饮版</a>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-key="footer_company">公司</h5>
+        <a href="#" class="i18n" data-key="footer_about">关于我们</a>
+        <a href="#" class="i18n" data-key="footer_blog">博客</a>
+        <a href="#" class="i18n" data-key="footer_contact">联系</a>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-key="footer_legal">法律</h5>
+        <a href="#" class="i18n" data-key="footer_privacy">隐私政策</a>
+        <a href="#" class="i18n" data-key="footer_terms">服务条款</a>
+        <a href="#" class="i18n" data-key="footer_refund">退款政策</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 NUNO LLC. <span class="i18n" data-key="footer_rights">All rights reserved.</span></span>
+      <span class="i18n" data-key="footer_stripe_note">支付由 Stripe 提供安全保障</span>
+    </div>
+  </div>
 </footer>
 
+<script>
+/* ═══════════════════════════════════════════
+   I18N DATA
+═══════════════════════════════════════════ */
+const i18n = {
+  zh: {
+    badge: '极简财务工具',
+    hero_h1_1: '复杂变', hero_h1_2: '简单',
+    hero_sub: '你不需要懂财务逻辑——水獭替你计算一切。从生存红线到库存毛利，数字自动跑，你只管做生意。',
+    hero_cta1: '探索产品 →', hero_cta2: '查看定价',
+    nav_apps: '产品', nav_why: '理念', nav_pricing: '定价', nav_start: '免费开始',
+    deck_badge1: '能量站', deck_badge2: '零售版', deck_badge3: '美业版',
+    deck_label1: '每日生存红线', deck_label2: '今日毛利', deck_label3: '综合净利润',
+    deck_bar_rent: '租金', deck_bar_labor: '人工', deck_bar_other: '其他',
+    deck_bar_sales: '销售额', deck_bar_cost: '成本', deck_bar_margin: '毛利率',
+    deck_bar_staff: '员工提成', deck_bar_channel: '渠道成本', deck_bar_material: '耗材成本',
+    deck_hint: '滑动查看',
+    tag1_title: '不需要会计学位', tag1_sub: '打开即用，数字自动算好，你只看结果就够了。',
+    tag2_title: '生意数据，随时在手', tag2_sub: '无需安装，直接用，数据永远同步。',
+    tag3_title: '从零到清晰，几分钟完成', tag3_sub: '录入成本，系统帮你算红线、毛利、提成、库存价值。',
+    apps_label: '四款工具', apps_title: '为你的行业\n精准打造', apps_desc: '无论零售、美业还是餐饮，水獭用你听得懂的语言把复杂财务说清楚。',
+    app1_name: '水獭能量站', app1_sub: '知道每月最少要赚多少，才能活下去——这比会计报表更重要。',
+    app1_f1: '每日生存红线', app1_f2: '净利润计算', app1_f3: '盈亏临界点', app1_f4: '投资回报率',
+    app2_name: '獭掌柜·零售版', app2_sub: '卖出一件，库存自动减一件，毛利自动算出来。',
+    app2_f1: '智能库存', app2_f2: '辅助定价', app2_f3: '毛利率实时', app2_f4: '库存价值', app2_f5: '贡献利润排行', app2_f6: '临期货品提醒',
+    app3_name: '獭掌柜·美业版', app3_sub: '员工提成、获客成本、库存智能精确到ml，每单全自动跑出净利润。',
+    app3_f1: '员工提成', app3_f2: '获客成本', app3_f3: '精细化成本计算', app3_f4: '自动减库存',
+    app4_name: '獭掌柜·餐饮版', app4_sub: '餐厅的每一分钱都看清楚。',
+    app4_f1: 'BOM配方', app4_f2: '精准毛利', app4_f3: '外卖成本', app4_f4: '投流成本',
+    phil_label: '水獭的理念', phil_title: '款工具\n一个信念', phil_desc: '财务不该是只有专业人士才能读懂的密码。每个做生意的人，都有权利看清楚自己的钱去哪了。',
+    stat1_title: '零配置上手', stat1_desc: '不需要培训，不需要会计知识，打开填数字，结果立刻出来。',
+    stat2_title: '实时联动数据', stat2_desc: '销售即录入，库存即扣减，毛利即更新。所有数据环环相扣，从不过期。',
+    stat3_title: '全球支付', stat3_desc: '支持订阅，不获取您的手机号与实名信息，隐私保护，海内外通用。',
+    stat4_title: '无需安装', stat4_desc: '浏览器直开，APP体验。iOS、Android、桌面全平台兼容。',
+    pricing_label: '定价', pricing_title: '清晰透明\n按需订阅', pricing_desc: '所有产品均支持免费试用 · 安全支付 · 随时取消',
+    plan1_label: '基础版', plan1_name: '水獭能量站', plan1_f1: '每日生存红线计算', plan1_f2: '极简交互', plan1_f3: '数据导出（Excel/CSV）', plan1_f4: '多语言界面',
+    plan2_label: '最受欢迎', plan2_name: '獭掌柜套装', plan2_f1: '零售 / 美业 / 餐饮 任选一款', plan2_f2: '库存进销自动联动', plan2_f3: '毛利实时计算', plan2_f4: '员工提成 & BOM & 获客成本', plan2_f5: '辅助录入库存',
+    plan3_label: '全家桶', plan3_name: '水獭全系', plan3_f1: '全部 4 款 PWA', plan3_f2: '跨店数据汇总', plan3_f3: '数据导出 (CSV/PDF)', plan3_f4: '专属客服',
+    plan4_name: '连锁 / 团队版', plan4_sub: '多门店、多员工账号，定制化接入，联系我们获取报价。',
+    per_month: ' /月', cta_try: '免费试用 14 天', cta_start: '立即开始', cta_contact: '联系我们',
+    trust1: 'Stripe 安全支付', trust2: '美国银行开户验证', trust3: '随时取消，无隐藏费用',
+    footer_desc: '复杂变简单。为每一个认真做生意的人，打造最贴心的财务工具。',
+    footer_products: '产品', footer_company: '公司', footer_legal: '法律',
+    footer_about: '关于我们', footer_blog: '博客', footer_contact: '联系',
+    footer_privacy: '隐私政策', footer_terms: '服务条款', footer_refund: '退款政策',
+    footer_rights: '版权所有', footer_stripe_note: '支付由 Stripe 提供安全保障',
+  },
+  en: {
+    badge: 'Zero-complexity Finance',
+    hero_h1_1: 'Complex becomes', hero_h1_2: 'Simple',
+    hero_sub: "You don't need to understand finance — Otter calculates everything for you. From survival threshold to gross margin, numbers run automatically.",
+    hero_cta1: 'Explore Products →', hero_cta2: 'View Pricing',
+    nav_apps: 'Products', nav_why: 'Philosophy', nav_pricing: 'Pricing', nav_start: 'Start Free',
+    deck_badge1: 'Station', deck_badge2: 'Retail', deck_badge3: 'Beauty',
+    deck_label1: 'Daily Survival Line', deck_label2: "Today's Gross Profit", deck_label3: 'Net Profit',
+    deck_bar_rent: 'Rent', deck_bar_labor: 'Labor', deck_bar_other: 'Other',
+    deck_bar_sales: 'Revenue', deck_bar_cost: 'Cost', deck_bar_margin: 'Margin',
+    deck_bar_staff: 'Commission', deck_bar_channel: 'Channel', deck_bar_material: 'Materials',
+    deck_hint: 'SWIPE TO EXPLORE',
+    tag1_title: 'No accounting degree needed', tag1_sub: 'Open and use immediately. Numbers are calculated automatically — you only see the results.',
+    tag2_title: 'Business data, always in hand', tag2_sub: 'No installation required. Open in browser, data always synced.',
+    tag3_title: 'Zero to clarity in minutes', tag3_sub: 'Enter costs — the system calculates survival line, margin, commissions, and inventory value.',
+    apps_label: 'Four Tools', apps_title: 'Built for\nyour industry', apps_desc: "Whether retail, beauty, or F&B — Otter explains complex finances in a language you understand.",
+    app1_name: 'Otter Station', app1_sub: "Know the minimum you need to earn each month to survive — more important than any accounting report.",
+    app1_f1: 'Survival Line', app1_f2: 'Net Profit Calc', app1_f3: 'Break-even Point', app1_f4: 'ROI Analysis',
+    app2_name: 'OtterKeeper · Retail', app2_sub: 'Sell one unit — inventory drops by one, gross profit calculated instantly.',
+    app2_f1: 'Smart Inventory', app2_f2: 'Pricing Assistant', app2_f3: 'Real-time Margin', app2_f4: 'Inventory Value', app2_f5: 'Profit Ranking', app2_f6: 'Expiry Alerts',
+    app3_name: 'OtterKeeper · Beauty', app3_sub: 'Staff commissions, acquisition cost, inventory precise to ml — net profit auto-calculated per service.',
+    app3_f1: 'Staff Commission', app3_f2: 'Acquisition Cost', app3_f3: 'Granular Costing', app3_f4: 'Auto Inventory',
+    app4_name: 'OtterKeeper · F&B', app4_sub: 'Every dollar in your restaurant, crystal clear.',
+    app4_f1: 'BOM Recipes', app4_f2: 'Precise Margin', app4_f3: 'Delivery Cost', app4_f4: 'Ad Spend',
+    phil_label: "Otter's Philosophy", phil_title: 'tools\nOne belief', phil_desc: 'Finance should not be a code only experts can read. Everyone running a business deserves to see clearly where their money goes.',
+    stat1_title: 'Zero setup', stat1_desc: 'No training, no accounting knowledge needed. Open, enter numbers, get instant results.',
+    stat2_title: 'Real-time linked data', stat2_desc: 'Sales recorded, inventory deducted, margin updated. All data interconnected, never outdated.',
+    stat3_title: 'Global payments', stat3_desc: 'Supports subscriptions with no phone or ID required. Privacy-first, works worldwide.',
+    stat4_title: 'No installation needed', stat4_desc: 'Open in browser, app-like experience. iOS, Android, and desktop all supported.',
+    pricing_label: 'Pricing', pricing_title: 'Clear & transparent\nPay as you grow', pricing_desc: 'All products include free trial · Secure payments · Cancel anytime',
+    plan1_label: 'Starter', plan1_name: 'Otter Station', plan1_f1: 'Survival line calculation', plan1_f2: 'Minimal UI', plan1_f3: 'Export (Excel/CSV)', plan1_f4: 'Multi-language UI',
+    plan2_label: 'Most Popular', plan2_name: 'OtterKeeper Bundle', plan2_f1: 'Retail / Beauty / F&B (choose one)', plan2_f2: 'Auto inventory sync', plan2_f3: 'Real-time gross margin', plan2_f4: 'Commissions & BOM & Acquisition cost', plan2_f5: 'Assisted inventory input',
+    plan3_label: 'All-In', plan3_name: 'Full Otter Suite', plan3_f1: 'All 4 PWA tools', plan3_f2: 'Cross-location data', plan3_f3: 'Export (CSV/PDF)', plan3_f4: 'Dedicated support',
+    plan4_name: 'Chain / Team Plan', plan4_sub: 'Multi-location, multi-staff accounts, custom integration — contact us for pricing.',
+    per_month: '/mo', cta_try: 'Start 14-day Free Trial', cta_start: 'Get Started', cta_contact: 'Contact Us',
+    trust1: 'Secure Stripe Payments', trust2: 'US Bank Account Verified', trust3: 'Cancel anytime, no hidden fees',
+    footer_desc: 'Complex becomes simple. Built for every serious business owner.',
+    footer_products: 'Products', footer_company: 'Company', footer_legal: 'Legal',
+    footer_about: 'About', footer_blog: 'Blog', footer_contact: 'Contact',
+    footer_privacy: 'Privacy Policy', footer_terms: 'Terms of Service', footer_refund: 'Refund Policy',
+    footer_rights: 'All rights reserved.', footer_stripe_note: 'Payments secured by Stripe',
+  },
+  fr: {
+    badge: 'Finance Sans Complexité',
+    hero_h1_1: 'Le complexe devient', hero_h1_2: 'Simple',
+    hero_sub: "Vous n'avez pas besoin de comprendre la finance — Otter calcule tout pour vous. Du seuil de survie à la marge brute, les chiffres se calculent automatiquement.",
+    hero_cta1: 'Explorer les produits →', hero_cta2: 'Voir les tarifs',
+    nav_apps: 'Produits', nav_why: 'Philosophie', nav_pricing: 'Tarifs', nav_start: 'Commencer',
+    deck_badge1: 'Station', deck_badge2: 'Retail', deck_badge3: 'Beauté',
+    deck_label1: 'Seuil de survie quotidien', deck_label2: 'Marge brute du jour', deck_label3: 'Bénéfice net',
+    deck_bar_rent: 'Loyer', deck_bar_labor: 'Main-d\'œuvre', deck_bar_other: 'Autre',
+    deck_bar_sales: 'Ventes', deck_bar_cost: 'Coûts', deck_bar_margin: 'Marge',
+    deck_bar_staff: 'Commission', deck_bar_channel: 'Canal', deck_bar_material: 'Matériaux',
+    deck_hint: 'GLISSER POUR EXPLORER',
+    tag1_title: 'Sans diplôme comptable', tag1_sub: "Ouvrir et utiliser immédiatement. Les chiffres sont calculés automatiquement.",
+    tag2_title: 'Données business, toujours à portée', tag2_sub: "Pas d'installation nécessaire. Ouvrir dans le navigateur, données toujours synchronisées.",
+    tag3_title: 'De zéro à la clarté en minutes', tag3_sub: "Entrez vos coûts — le système calcule seuil, marge, commissions et valeur de stock.",
+    apps_label: 'Quatre Outils', apps_title: 'Conçu pour\nvotre secteur', apps_desc: "Que ce soit le retail, la beauté ou la restauration — Otter explique les finances complexes dans un langage que vous comprenez.",
+    app1_name: 'Otter Station', app1_sub: "Connaître le minimum à gagner chaque mois pour survivre — plus important que tout rapport comptable.",
+    app1_f1: 'Seuil de survie', app1_f2: 'Calcul bénéfice net', app1_f3: 'Point mort', app1_f4: 'Analyse ROI',
+    app2_name: 'OtterKeeper · Retail', app2_sub: "Vendre une unité — le stock baisse d'une, bénéfice brut calculé instantanément.",
+    app2_f1: 'Stock intelligent', app2_f2: 'Aide à la tarification', app2_f3: 'Marge en temps réel', app2_f4: 'Valeur du stock', app2_f5: 'Classement profit', app2_f6: 'Alertes expiration',
+    app3_name: 'OtterKeeper · Beauté', app3_sub: "Commissions, coûts d'acquisition, stock précis au ml — bénéfice net calculé automatiquement.",
+    app3_f1: 'Commission staff', app3_f2: "Coût d'acquisition", app3_f3: 'Coûts détaillés', app3_f4: 'Stock automatique',
+    app4_name: 'OtterKeeper · Restauration', app4_sub: "Chaque euro de votre restaurant, crystal clair.",
+    app4_f1: 'Recettes BOM', app4_f2: 'Marge précise', app4_f3: 'Coût livraison', app4_f4: 'Budget pub',
+    phil_label: "La Philosophie d'Otter", phil_title: 'outils\nUne conviction', phil_desc: "La finance ne devrait pas être un code réservé aux experts. Chaque entrepreneur mérite de voir clairement où va son argent.",
+    stat1_title: 'Zéro configuration', stat1_desc: "Pas de formation, pas de connaissances comptables. Ouvrez, entrez des chiffres, résultats immédiats.",
+    stat2_title: 'Données liées en temps réel', stat2_desc: "Ventes enregistrées, stock déduit, marge mise à jour. Toutes les données interconnectées.",
+    stat3_title: 'Paiements mondiaux', stat3_desc: "Abonnements sans numéro de téléphone ni identité requise. Protection de la vie privée, mondial.",
+    stat4_title: 'Sans installation', stat4_desc: "Ouvrir dans le navigateur, expérience app. iOS, Android et bureau tous supportés.",
+    pricing_label: 'Tarifs', pricing_title: 'Clair & transparent\nPayez selon votre croissance', pricing_desc: "Essai gratuit inclus · Paiements sécurisés · Annulez à tout moment",
+    plan1_label: 'Démarrage', plan1_name: 'Otter Station', plan1_f1: 'Calcul du seuil de survie', plan1_f2: 'UI minimaliste', plan1_f3: 'Export (Excel/CSV)', plan1_f4: 'Interface multilingue',
+    plan2_label: 'Plus Populaire', plan2_name: 'Bundle OtterKeeper', plan2_f1: 'Retail / Beauté / Restauration (au choix)', plan2_f2: 'Synchronisation stock auto', plan2_f3: 'Marge brute en temps réel', plan2_f4: "Commissions & BOM & Coût d'acquisition", plan2_f5: 'Saisie stock assistée',
+    plan3_label: 'Tout-en-Un', plan3_name: 'Suite Otter Complète', plan3_f1: 'Les 4 outils PWA', plan3_f2: 'Données multi-sites', plan3_f3: 'Export (CSV/PDF)', plan3_f4: 'Support dédié',
+    plan4_name: 'Plan Chaîne / Équipe', plan4_sub: "Multi-sites, comptes multi-employés, intégration personnalisée — contactez-nous pour un devis.",
+    per_month: '/mois', cta_try: 'Essai gratuit 14 jours', cta_start: 'Commencer', cta_contact: 'Nous contacter',
+    trust1: 'Paiements Stripe sécurisés', trust2: 'Compte bancaire US vérifié', trust3: 'Annulez à tout moment, sans frais cachés',
+    footer_desc: 'Le complexe devient simple. Conçu pour chaque entrepreneur sérieux.',
+    footer_products: 'Produits', footer_company: 'Entreprise', footer_legal: 'Légal',
+    footer_about: 'À propos', footer_blog: 'Blog', footer_contact: 'Contact',
+    footer_privacy: 'Confidentialité', footer_terms: "Conditions d'utilisation", footer_refund: 'Remboursement',
+    footer_rights: 'Tous droits réservés.', footer_stripe_note: 'Paiements sécurisés par Stripe',
+  },
+  vi: {
+    badge: 'Tài Chính Không Phức Tạp',
+    hero_h1_1: 'Phức tạp trở thành', hero_h1_2: 'Đơn giản',
+    hero_sub: "Bạn không cần hiểu tài chính — Otter tính toán mọi thứ cho bạn. Từ ngưỡng sinh tồn đến lợi nhuận gộp, số liệu tự động chạy.",
+    hero_cta1: 'Khám phá sản phẩm →', hero_cta2: 'Xem bảng giá',
+    nav_apps: 'Sản phẩm', nav_why: 'Triết lý', nav_pricing: 'Bảng giá', nav_start: 'Bắt đầu miễn phí',
+    deck_badge1: 'Station', deck_badge2: 'Bán lẻ', deck_badge3: 'Làm đẹp',
+    deck_label1: 'Ngưỡng sinh tồn hàng ngày', deck_label2: 'Lợi nhuận gộp hôm nay', deck_label3: 'Lợi nhuận ròng',
+    deck_bar_rent: 'Thuê nhà', deck_bar_labor: 'Nhân công', deck_bar_other: 'Khác',
+    deck_bar_sales: 'Doanh thu', deck_bar_cost: 'Chi phí', deck_bar_margin: 'Biên LN',
+    deck_bar_staff: 'Hoa hồng', deck_bar_channel: 'Kênh', deck_bar_material: 'Vật liệu',
+    deck_hint: 'VUỐT ĐỂ XEM',
+    tag1_title: 'Không cần bằng kế toán', tag1_sub: 'Mở ra là dùng ngay. Số liệu tự động tính — bạn chỉ cần xem kết quả.',
+    tag2_title: 'Dữ liệu kinh doanh, luôn trong tầm tay', tag2_sub: 'Không cần cài đặt. Mở trên trình duyệt, dữ liệu luôn đồng bộ.',
+    tag3_title: 'Từ số không đến rõ ràng trong vài phút', tag3_sub: 'Nhập chi phí — hệ thống tính ngưỡng sinh tồn, lợi nhuận, hoa hồng và tồn kho.',
+    apps_label: 'Bốn Công Cụ', apps_title: 'Được xây dựng\ncho ngành của bạn', apps_desc: "Dù bán lẻ, làm đẹp hay F&B — Otter giải thích tài chính phức tạp bằng ngôn ngữ bạn hiểu.",
+    app1_name: 'Otter Station', app1_sub: "Biết mức tối thiểu cần kiếm mỗi tháng để tồn tại — quan trọng hơn bất kỳ báo cáo kế toán nào.",
+    app1_f1: 'Ngưỡng sinh tồn', app1_f2: 'Tính lợi nhuận ròng', app1_f3: 'Điểm hòa vốn', app1_f4: 'Phân tích ROI',
+    app2_name: 'OtterKeeper · Bán Lẻ', app2_sub: 'Bán một sản phẩm — tồn kho giảm một, lợi nhuận gộp tính ngay tức khắc.',
+    app2_f1: 'Tồn kho thông minh', app2_f2: 'Hỗ trợ định giá', app2_f3: 'Biên LN thực', app2_f4: 'Giá trị tồn kho', app2_f5: 'Xếp hạng lợi nhuận', app2_f6: 'Cảnh báo hết hạn',
+    app3_name: 'OtterKeeper · Làm Đẹp', app3_sub: 'Hoa hồng nhân viên, chi phí kênh, kho hàng chính xác đến ml — lợi nhuận ròng tự động mỗi dịch vụ.',
+    app3_f1: 'Hoa hồng nhân viên', app3_f2: 'Chi phí kênh', app3_f3: 'Tính chi phí chi tiết', app3_f4: 'Tự động trừ kho',
+    app4_name: 'OtterKeeper · Nhà Hàng', app4_sub: 'Từng đồng trong nhà hàng, rõ như ban ngày.',
+    app4_f1: 'Công thức BOM', app4_f2: 'Biên LN chính xác', app4_f3: 'Chi phí giao hàng', app4_f4: 'Chi phí quảng cáo',
+    phil_label: 'Triết Lý Của Otter', phil_title: 'công cụ\nMột niềm tin', phil_desc: 'Tài chính không nên là mật mã chỉ chuyên gia mới đọc được. Mỗi người kinh doanh đều có quyền thấy rõ tiền mình đi đâu.',
+    stat1_title: 'Không cần cài đặt', stat1_desc: 'Không cần đào tạo, không cần kiến thức kế toán. Mở, nhập số, kết quả ngay lập tức.',
+    stat2_title: 'Dữ liệu liên kết thời gian thực', stat2_desc: 'Ghi bán hàng, kho giảm, biên LN cập nhật. Tất cả dữ liệu kết nối, không bao giờ lỗi thời.',
+    stat3_title: 'Thanh toán toàn cầu', stat3_desc: 'Không yêu cầu số điện thoại hay danh tính. Bảo vệ quyền riêng tư, hoạt động toàn cầu.',
+    stat4_title: 'Không cần cài đặt', stat4_desc: 'Mở trên trình duyệt, trải nghiệm như app. iOS, Android và máy tính bàn đều hỗ trợ.',
+    pricing_label: 'Bảng Giá', pricing_title: 'Rõ ràng & minh bạch\nTrả theo nhu cầu', pricing_desc: 'Dùng thử miễn phí · Thanh toán an toàn · Hủy bất cứ lúc nào',
+    plan1_label: 'Cơ Bản', plan1_name: 'Otter Station', plan1_f1: 'Tính ngưỡng sinh tồn', plan1_f2: 'Giao diện tối giản', plan1_f3: 'Xuất file (Excel/CSV)', plan1_f4: 'Giao diện đa ngôn ngữ',
+    plan2_label: 'Phổ Biến Nhất', plan2_name: 'Gói OtterKeeper', plan2_f1: 'Bán lẻ / Làm đẹp / Nhà hàng (chọn 1)', plan2_f2: 'Đồng bộ kho tự động', plan2_f3: 'Biên LN thời gian thực', plan2_f4: 'Hoa hồng & BOM & Chi phí kênh', plan2_f5: 'Nhập kho có hỗ trợ',
+    plan3_label: 'Trọn Gói', plan3_name: 'Bộ Otter Đầy Đủ', plan3_f1: 'Tất cả 4 PWA', plan3_f2: 'Dữ liệu đa chi nhánh', plan3_f3: 'Xuất file (CSV/PDF)', plan3_f4: 'Hỗ trợ riêng',
+    plan4_name: 'Chuỗi / Nhóm', plan4_sub: 'Đa địa điểm, tài khoản đa nhân viên, tích hợp tùy chỉnh — liên hệ chúng tôi để báo giá.',
+    per_month: '/tháng', cta_try: 'Dùng thử 14 ngày miễn phí', cta_start: 'Bắt đầu ngay', cta_contact: 'Liên hệ',
+    trust1: 'Thanh toán Stripe an toàn', trust2: 'Xác minh ngân hàng Mỹ', trust3: 'Hủy bất cứ lúc nào, không phí ẩn',
+    footer_desc: 'Phức tạp trở thành đơn giản. Xây dựng cho mọi doanh nhân nghiêm túc.',
+    footer_products: 'Sản phẩm', footer_company: 'Công ty', footer_legal: 'Pháp lý',
+    footer_about: 'Về chúng tôi', footer_blog: 'Blog', footer_contact: 'Liên hệ',
+    footer_privacy: 'Chính sách bảo mật', footer_terms: 'Điều khoản dịch vụ', footer_refund: 'Chính sách hoàn tiền',
+    footer_rights: 'Bảo lưu mọi quyền.', footer_stripe_note: 'Thanh toán được bảo mật bởi Stripe',
+  }
+};
 
+/* ═══════════════════════════════════════════
+   LANG SWITCH
+═══════════════════════════════════════════ */
+function setLang(lang) {
+  const data = i18n[lang];
+  document.querySelectorAll('.i18n').forEach(el => {
+    const key = el.getAttribute('data-key');
+    if (key && data[key] !== undefined) el.textContent = data[key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  document.documentElement.lang = lang;
+  const cjk = lang === 'zh' ? "'Plus Jakarta Sans','Noto Sans SC',sans-serif" : "'Plus Jakarta Sans',sans-serif";
+  document.body.style.fontFamily = cjk;
+}
+
+/* ═══════════════════════════════════════════
+   CARD DECK (Hero Preview)
+═══════════════════════════════════════════ */
+const viewport = document.getElementById('deckViewport');
+const deckDots = document.querySelectorAll('.deck-dot');
+let currentCard = 0;
+let startX = 0, isDragging = false;
+
+const cards = () => Array.from(viewport.querySelectorAll('.preview-card'));
+
+function updateDeck(active) {
+  currentCard = active;
+  const cs = cards();
+  const n = cs.length;
+  deckDots.forEach((d, i) => d.classList.toggle('active', i === active));
+
+  cs.forEach((card, i) => {
+    const rel = (i - active + n) % n; // 0=front, 1=mid, 2=back
+    card.style.zIndex = n - rel;
+    if (rel === 0) {
+      card.style.transform = 'translateY(0) scale(1) rotateX(0deg)';
+      card.style.opacity = '1';
+      card.style.filter = 'blur(0px)';
+    } else if (rel === 1) {
+      card.style.transform = 'translateY(14px) scale(0.94) rotateX(2deg)';
+      card.style.opacity = '0.7';
+      card.style.filter = 'blur(0px)';
+    } else {
+      card.style.transform = 'translateY(28px) scale(0.88) rotateX(4deg)';
+      card.style.opacity = '0.45';
+      card.style.filter = 'blur(0.5px)';
+    }
+  });
+}
+
+function goToCard(idx) {
+  updateDeck(idx);
+}
+
+function advanceCard() {
+  const cs = cards();
+  const next = (currentCard + 1) % cs.length;
+  // Brief swipe-out animation on front card
+  const front = cs.find((_, i) => {
+    const rel = (i - currentCard + cs.length) % cs.length;
+    return rel === 0;
+  });
+  if (front) {
+    front.style.transition = 'transform 0.35s cubic-bezier(0.4,0,1,1), opacity 0.25s ease';
+    front.style.transform = 'translateX(-110%) rotate(-6deg)';
+    front.style.opacity = '0';
+    setTimeout(() => {
+      front.style.transition = 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease';
+      updateDeck(next);
+    }, 350);
+  } else {
+    updateDeck(next);
+  }
+}
+
+// Touch / drag
+viewport.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+viewport.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - startX;
+  if (Math.abs(dx) > 40) advanceCard();
+}, { passive: true });
+
+viewport.addEventListener('mousedown', e => { startX = e.clientX; isDragging = true; });
+window.addEventListener('mouseup', e => {
+  if (!isDragging) return;
+  isDragging = false;
+  const dx = e.clientX - startX;
+  if (Math.abs(dx) > 40) advanceCard();
+});
+
+// Click front card to advance
+viewport.addEventListener('click', () => advanceCard());
+
+// Auto cycle every 4s
+setInterval(advanceCard, 4000);
+
+/* ═══════════════════════════════════════════
+   APP CARDS SCROLL DOTS
+═══════════════════════════════════════════ */
+const appTrack = document.getElementById('appTrack');
+const appDotEls = document.querySelectorAll('.app-dot');
+
+function scrollAppTo(i) {
+  const cards = appTrack.querySelectorAll('.app-card');
+  if (cards[i]) {
+    cards[i].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+  }
+}
+
+appTrack.addEventListener('scroll', () => {
+  const cs = appTrack.querySelectorAll('.app-card');
+  let closest = 0, minDist = Infinity;
+  cs.forEach((c, i) => {
+    const dist = Math.abs(c.getBoundingClientRect().left - appTrack.getBoundingClientRect().left);
+    if (dist < minDist) { minDist = dist; closest = i; }
+  });
+  appDotEls.forEach((d, i) => d.classList.toggle('active', i === closest));
+});
+
+/* ═══════════════════════════════════════════
+   SCROLL FADE-IN
+═══════════════════════════════════════════ */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
