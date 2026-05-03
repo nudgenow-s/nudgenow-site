@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>服务条款 — NUNO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="nuno.css">
+<style>
+.legal-hero{padding:160px 24px 80px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.legal-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(59,130,246,.06) 0%,transparent 60%);pointer-events:none;}
+.legal-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.010) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.010) 1px,transparent 1px);background-size:72px 72px;mask-image:radial-gradient(ellipse 70% 80% at 50% 0%,black 0%,transparent 100%);}
+.legal-eyebrow{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(96,165,250,.2);background:rgba(96,165,250,.05);border-radius:40px;padding:6px 18px 6px 12px;margin-bottom:32px;position:relative;z-index:2;backdrop-filter:blur(12px);}
+.legal-eyebrow-text{font-family:var(--font-mono);font-size:9px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--blue2);}
+.legal-hero h1{font-family:var(--font-display);font-size:clamp(48px,7vw,96px);line-height:.95;letter-spacing:-3px;margin-bottom:24px;background:linear-gradient(165deg,#fff 40%,rgba(255,255,255,.38));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;position:relative;z-index:2;}
+.legal-hero-meta{display:flex;align-items:center;justify-content:center;gap:24px;font-family:var(--font-mono);font-size:10px;color:var(--text3);letter-spacing:1.5px;position:relative;z-index:2;}
+.legal-body{max-width:780px;margin:0 auto;padding:72px 24px 120px;}
+.toc{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:28px 32px;margin-bottom:64px;}
+.toc-title{font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue2);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.toc-title::before{content:'';width:20px;height:1px;background:var(--blue2);}
+.toc-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px 32px;}
+.toc-list li a{color:var(--text2);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:8px;padding:4px 0;transition:color .2s;}
+.toc-list li a:hover{color:var(--blue2);}
+.toc-num{font-family:var(--font-mono);font-size:9px;color:var(--text3);width:18px;flex-shrink:0;}
+.legal-section{margin-bottom:56px;padding-bottom:56px;border-bottom:1px solid var(--border);}
+.legal-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.legal-section-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:24px;}
+.section-num{font-family:var(--font-mono);font-size:10px;color:var(--blue2);opacity:.7;letter-spacing:2px;padding-top:10px;flex-shrink:0;width:28px;}
+.legal-section h2{font-family:var(--font-display);font-size:clamp(22px,2.8vw,30px);line-height:1.15;color:var(--text);letter-spacing:-.5px;}
+.legal-section p{font-size:14px;color:var(--text2);line-height:1.9;margin-bottom:16px;}
+.legal-section p:last-child{margin-bottom:0;}
+.legal-section ul{list-style:none;margin:14px 0 20px;display:flex;flex-direction:column;gap:8px;}
+.legal-section ul li{font-size:14px;color:var(--text2);line-height:1.75;display:flex;align-items:flex-start;gap:12px;}
+.legal-section ul li::before{content:'—';color:var(--blue2);opacity:.55;font-family:var(--font-mono);font-size:10px;flex-shrink:0;margin-top:4px;}
+.legal-highlight{background:rgba(59,130,246,.04);border:1px solid rgba(59,130,246,.12);border-left:3px solid var(--blue2);border-radius:0 12px 12px 0;padding:18px 22px;margin:20px 0;}
+.legal-highlight p{font-size:13px;color:var(--text2);line-height:1.8;margin:0;}
+.legal-highlight strong{color:var(--blue2);font-weight:600;}
+.legal-warn{background:rgba(248,113,113,.04);border:1px solid rgba(248,113,113,.15);border-left:3px solid #F87171;border-radius:0 12px 12px 0;padding:18px 22px;margin:20px 0;}
+.legal-warn p{font-size:13px;color:var(--text2);line-height:1.8;margin:0;}
+.legal-warn strong{color:#FCA5A5;font-weight:600;}
+.legal-contact-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:32px;margin-top:24px;display:flex;align-items:center;gap:20px;}
+.legal-contact-icon{width:48px;height:48px;border-radius:14px;background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.legal-contact-info p{font-size:13px;color:var(--text2);line-height:1.6;margin:0;}
+.legal-contact-info a{color:var(--blue2);text-decoration:none;}
+@media(max-width:600px){.toc-list{grid-template-columns:1fr;}.legal-contact-card{flex-direction:column;}}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="scroll-line" id="scrollLine"></div>
+
+<nav class="nav" id="mainNav">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-mark">N</div>
+    <span class="nav-logo-text">NUNO</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#apps" class="i18n" data-key="legal_nav_products">产品</a>
+    <a href="index.html#why" class="i18n" data-key="legal_nav_philosophy">理念</a>
+    <a href="index.html#pricing" class="i18n" data-key="legal_nav_pricing">定价</a>
+    <a href="index.html#pricing" class="nav-cta-link i18n" data-key="legal_nav_start">免费开始</a>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('zh')">中文</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('vi')">VI</button>
+  </div>
+</nav>
+
+<div class="legal-hero">
+  <div class="legal-hero-grid"></div>
+  <div class="legal-eyebrow">
+    <span style="font-size:13px;">📋</span>
+    <span class="legal-eyebrow-text i18n" data-key="terms_badge">服务条款</span>
+  </div>
+  <h1 class="i18n" data-key="terms_h1">服务条款</h1>
+  <div class="legal-hero-meta">
+    <span>📅 <span class="i18n" data-key="legal_effective">生效日期：2026 年 1 月 1 日</span></span>
+    <span>·</span>
+    <span>🔄 <span class="i18n" data-key="legal_updated">最后更新：2026 年 4 月 30 日</span></span>
+  </div>
+</div>
+
+<div class="legal-body">
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title"><span class="i18n" data-key="legal_toc">目录</span></div>
+    <ol class="toc-list">
+      <li><a href="#s1"><span class="toc-num">01</span><span class="i18n" data-key="terms_toc1">接受条款</span></a></li>
+      <li><a href="#s2"><span class="toc-num">02</span><span class="i18n" data-key="terms_toc2">服务说明</span></a></li>
+      <li><a href="#s3"><span class="toc-num">03</span><span class="i18n" data-key="terms_toc3">账户注册与安全</span></a></li>
+      <li><a href="#s4"><span class="toc-num">04</span><span class="i18n" data-key="terms_toc4">订阅与付款</span></a></li>
+      <li><a href="#s5"><span class="toc-num">05</span><span class="i18n" data-key="terms_toc5">可接受使用规范</span></a></li>
+      <li><a href="#s6"><span class="toc-num">06</span><span class="i18n" data-key="terms_toc6">您的内容与数据</span></a></li>
+      <li><a href="#s7"><span class="toc-num">07</span><span class="i18n" data-key="terms_toc7">知识产权</span></a></li>
+      <li><a href="#s8"><span class="toc-num">08</span><span class="i18n" data-key="terms_toc8">免责声明</span></a></li>
+      <li><a href="#s9"><span class="toc-num">09</span><span class="i18n" data-key="terms_toc9">责任限制</span></a></li>
+      <li><a href="#s10"><span class="toc-num">10</span><span class="i18n" data-key="terms_toc10">服务终止</span></a></li>
+      <li><a href="#s11"><span class="toc-num">11</span><span class="i18n" data-key="terms_toc11">争议解决</span></a></li>
+      <li><a href="#s12"><span class="toc-num">12</span><span class="i18n" data-key="terms_toc12">联系我们</span></a></li>
+    </ol>
+  </div>
+
+  <div class="legal-highlight">
+    <p><span class="i18n" data-key="terms_summary">简短版：使用 NUNO 即表示您同意这些条款。NUNO 是辅助决策的财务工具，不是会计师或财务顾问。您对基于本工具做出的任何商业决策负全部责任。</span></p>
+  </div>
+
+  <!-- S1 -->
+  <div class="legal-section" id="s1">
+    <div class="legal-section-header"><span class="section-num">01</span><h2 class="i18n" data-key="terms_s1_title">接受条款</h2></div>
+    <p class="i18n" data-key="terms_s1_p1">欢迎使用 NUNO。本服务条款是您与 NUNO LLC 之间的法律协议，适用于您对 NUNO 旗下所有产品和服务的使用，包括但不限于：</p>
+    <ul>
+      <li class="i18n" data-key="terms_s1_l1">水獭能量站（Otter Station）</li>
+      <li class="i18n" data-key="terms_s1_l2">獭掌柜·零售版（OtterKeeper Retail）</li>
+      <li class="i18n" data-key="terms_s1_l3">獭掌柜·美业版（OtterKeeper Beauty）</li>
+      <li class="i18n" data-key="terms_s1_l4">獭掌柜·餐饮版（OtterKeeper F&amp;B）</li>
+    </ul>
+    <p class="i18n" data-key="terms_s1_p2">通过注册账户、访问或使用我们的任何服务，即表示您已阅读、理解并同意受本条款约束。如果您不同意本条款的任何部分，请停止使用我们的服务。</p>
+    <p class="i18n" data-key="terms_s1_p3">您须年满 18 周岁方可使用本服务。代表企业使用本服务的个人须具有代表该企业签订具有法律约束力协议的授权。</p>
+  </div>
+
+  <!-- S2 -->
+  <div class="legal-section" id="s2">
+    <div class="legal-section-header"><span class="section-num">02</span><h2 class="i18n" data-key="terms_s2_title">服务说明</h2></div>
+    <p class="i18n" data-key="terms_s2_p1">NUNO 提供一系列基于 Web 的财务辅助工具，帮助小型企业主理解和追踪其业务的基本财务指标，包括但不限于生存红线计算、库存毛利分析、员工提成管理等。</p>
+    <div class="legal-warn">
+      <p><span class="i18n" data-key="terms_s2_warn">重要提示：NUNO 是辅助性计算与记录工具，不构成专业会计、税务、法律或财务投资建议。应用内显示的所有数据均基于您输入的信息计算得出。在做出重要商业决策之前，请咨询持牌会计师或财务顾问。</span></p>
+    </div>
+    <p class="i18n" data-key="terms_s2_p2">我们保留随时修改、暂停或终止服务（或其任何部分）的权利，恕不另行通知。</p>
+  </div>
+
+  <!-- S3 -->
+  <div class="legal-section" id="s3">
+    <div class="legal-section-header"><span class="section-num">03</span><h2 class="i18n" data-key="terms_s3_title">账户注册与安全</h2></div>
+    <p class="i18n" data-key="terms_s3_p1">使用 NUNO 需要创建账户。您在注册时须提供真实、准确、完整的信息，并在信息发生变化时及时更新。</p>
+    <p class="i18n" data-key="terms_s3_p2">关于账户安全，您须承诺：</p>
+    <ul>
+      <li class="i18n" data-key="terms_s3_l1">妥善保管您的登录凭据，不与他人共享账户密码</li>
+      <li class="i18n" data-key="terms_s3_l2">在发现任何未经授权的账户访问时，立即通知我们</li>
+      <li class="i18n" data-key="terms_s3_l3">对您账户下发生的所有活动负责，无论是否经过您的授权</li>
+      <li class="i18n" data-key="terms_s3_l4">不创建多个账户以规避付费限制或其他使用规定</li>
+    </ul>
+    <div class="legal-highlight">
+      <p><span class="i18n" data-key="terms_s3_note">一个账户，一个用户：基础订阅计划限单人使用。如需多人访问，请联系我们了解团队版方案。</span></p>
+    </div>
+  </div>
+
+  <!-- S4 -->
+  <div class="legal-section" id="s4">
+    <div class="legal-section-header"><span class="section-num">04</span><h2 class="i18n" data-key="terms_s4_title">订阅与付款</h2></div>
+    <p class="i18n" data-key="terms_s4_p1">NUNO 采用订阅制定价模式。所有付款通过 Stripe 安全处理，我们支持主流信用卡和借记卡。</p>
+    <ul>
+      <li class="i18n" data-key="terms_s4_l1">计费周期：按月或按年订阅，从您首次付款之日起计算</li>
+      <li class="i18n" data-key="terms_s4_l2">自动续费：订阅将在每个计费周期结束时自动续费，除非您提前取消</li>
+      <li class="i18n" data-key="terms_s4_l3">价格变更：我们将提前 30 天通过电子邮件告知您任何价格调整</li>
+      <li class="i18n" data-key="terms_s4_l4">免费试用：试用期结束后，除非您主动取消，将自动转为付费订阅</li>
+      <li class="i18n" data-key="terms_s4_l5">货币：所有价格以美元（USD）计价，实际收费金额可能因您所在地区的税率而略有差异</li>
+    </ul>
+    <p class="i18n" data-key="terms_s4_p2">如因您提供的支付信息有误或账户余额不足导致付款失败，我们保留暂停或终止您访问权限的权利。</p>
+  </div>
+
+  <!-- S5 -->
+  <div class="legal-section" id="s5">
+    <div class="legal-section-header"><span class="section-num">05</span><h2 class="i18n" data-key="terms_s5_title">可接受使用规范</h2></div>
+    <p class="i18n" data-key="terms_s5_p1">使用 NUNO 服务时，您同意不从事以下行为：</p>
+    <ul>
+      <li class="i18n" data-key="terms_s5_l1">违反任何适用的法律法规</li>
+      <li class="i18n" data-key="terms_s5_l2">上传或传播包含恶意软件、病毒或任何有害代码的内容</li>
+      <li class="i18n" data-key="terms_s5_l3">尝试未经授权访问我们的系统、服务器或其他用户的账户</li>
+      <li class="i18n" data-key="terms_s5_l4">对服务进行逆向工程、反编译或试图提取源代码</li>
+      <li class="i18n" data-key="terms_s5_l5">将服务用于任何欺诈、洗钱或其他非法商业活动</li>
+      <li class="i18n" data-key="terms_s5_l6">以任何方式干扰或破坏服务的正常运行</li>
+      <li class="i18n" data-key="terms_s5_l7">抓取、爬取或以自动化方式批量提取服务数据</li>
+    </ul>
+    <p class="i18n" data-key="terms_s5_p2">违反上述规范可能导致账户被立即终止，且不予退款。</p>
+  </div>
+
+  <!-- S6 -->
+  <div class="legal-section" id="s6">
+    <div class="legal-section-header"><span class="section-num">06</span><h2 class="i18n" data-key="terms_s6_title">您的内容与数据</h2></div>
+    <p class="i18n" data-key="terms_s6_p1">您在 NUNO 中录入的所有业务数据完全归您所有。我们不主张对您的内容拥有任何知识产权。</p>
+    <p class="i18n" data-key="terms_s6_p2">通过使用本服务，您授予我们一项有限的、非独占的许可，仅用于向您提供服务所必需的技术操作。</p>
+    <ul>
+      <li class="i18n" data-key="terms_s6_l1">您可随时通过数据导出功能以 CSV 格式导出您的所有数据</li>
+      <li class="i18n" data-key="terms_s6_l2">账户注销后，您的数据将在 30 天内被永久删除</li>
+      <li class="i18n" data-key="terms_s6_l3">我们不会将您的业务数据用于任何分析、广告或第三方共享目的</li>
+    </ul>
+    <p class="i18n" data-key="terms_s6_p3">您对您录入数据的准确性负责。基于错误输入数据产生的计算结果，我们不承担任何责任。</p>
+  </div>
+
+  <!-- S7 -->
+  <div class="legal-section" id="s7">
+    <div class="legal-section-header"><span class="section-num">07</span><h2 class="i18n" data-key="terms_s7_title">知识产权</h2></div>
+    <p class="i18n" data-key="terms_s7_p1">NUNO 服务的所有内容——包括但不限于软件代码、界面设计、图标、文字、算法逻辑和品牌标识——均为 NUNO LLC 的专有财产，受适用的知识产权法律保护。</p>
+    <p class="i18n" data-key="terms_s7_p2">本条款不向您转让任何知识产权。您获得的仅是在本条款约束下使用服务的有限、不可转让、非独占许可。</p>
+    <p class="i18n" data-key="terms_s7_p3">未经我们书面许可，您不得复制、修改、分发、出售或创作基于我们服务的衍生作品。</p>
+  </div>
+
+  <!-- S8 -->
+  <div class="legal-section" id="s8">
+    <div class="legal-section-header"><span class="section-num">08</span><h2 class="i18n" data-key="terms_s8_title">免责声明</h2></div>
+    <div class="legal-warn">
+      <p><span class="i18n" data-key="terms_s8_warn">服务按"现状"提供：在法律允许的最大范围内，NUNO 明确否认所有明示或默示的保证，包括但不限于适销性保证、特定用途适用性保证及不侵权保证。</span></p>
+    </div>
+    <p class="i18n" data-key="terms_s8_p1">我们不保证：</p>
+    <ul>
+      <li class="i18n" data-key="terms_s8_l1">服务将不间断、无错误或完全安全地运行</li>
+      <li class="i18n" data-key="terms_s8_l2">服务中的任何缺陷都将被纠正</li>
+      <li class="i18n" data-key="terms_s8_l3">基于您输入数据生成的任何计算结果的商业准确性</li>
+      <li class="i18n" data-key="terms_s8_l4">服务将满足您所有特定的业务需求</li>
+    </ul>
+    <p class="i18n" data-key="terms_s8_p2">财务决策的最终判断权在于您。NUNO 提供的是数据辅助，而非经营建议。</p>
+  </div>
+
+  <!-- S9 -->
+  <div class="legal-section" id="s9">
+    <div class="legal-section-header"><span class="section-num">09</span><h2 class="i18n" data-key="terms_s9_title">责任限制</h2></div>
+    <p class="i18n" data-key="terms_s9_p1">在适用法律允许的最大范围内，NUNO LLC 及其董事、员工、合作伙伴对以下任何损失概不负责：</p>
+    <ul>
+      <li class="i18n" data-key="terms_s9_l1">因使用或无法使用本服务导致的利润损失</li>
+      <li class="i18n" data-key="terms_s9_l2">因依赖服务计算结果而做出商业决策所产生的损失</li>
+      <li class="i18n" data-key="terms_s9_l3">数据丢失或损坏</li>
+      <li class="i18n" data-key="terms_s9_l4">任何间接、附带、特殊或惩罚性损害</li>
+    </ul>
+    <p class="i18n" data-key="terms_s9_p2">在任何情况下，我们对您的总责任不超过您在索赔事件发生前 12 个月内实际支付给我们的订阅费用总额。</p>
+  </div>
+
+  <!-- S10 -->
+  <div class="legal-section" id="s10">
+    <div class="legal-section-header"><span class="section-num">10</span><h2 class="i18n" data-key="terms_s10_title">服务终止</h2></div>
+    <p class="i18n" data-key="terms_s10_p1">您可以随时取消订阅，无需提供理由。取消后，您的账户将在当前计费周期结束时失效，已支付的费用不予退还。</p>
+    <p class="i18n" data-key="terms_s10_p2">我们保留在以下情形下立即暂停或终止您账户的权利：</p>
+    <ul>
+      <li class="i18n" data-key="terms_s10_l1">您违反本服务条款的任何规定</li>
+      <li class="i18n" data-key="terms_s10_l2">您的账户存在欺诈或违法活动的迹象</li>
+      <li class="i18n" data-key="terms_s10_l3">连续 3 个计费周期付款失败</li>
+      <li class="i18n" data-key="terms_s10_l4">法律或监管要求</li>
+    </ul>
+    <p class="i18n" data-key="terms_s10_p3">账户终止后，您可在 30 天内通过联系支持团队申请导出您的数据。30 天后数据将被永久删除。</p>
+  </div>
+
+  <!-- S11 -->
+  <div class="legal-section" id="s11">
+    <div class="legal-section-header"><span class="section-num">11</span><h2 class="i18n" data-key="terms_s11_title">争议解决</h2></div>
+    <p class="i18n" data-key="terms_s11_p1">如果您对我们的服务有任何争议，我们鼓励您首先通过以下方式与我们直接沟通解决：</p>
+    <ul>
+      <li class="i18n" data-key="terms_s11_l1">发送邮件至 hello@nuno.app 描述您的问题</li>
+      <li class="i18n" data-key="terms_s11_l2">我们承诺在 5 个工作日内给予正式回复</li>
+      <li class="i18n" data-key="terms_s11_l3">双方将诚意协商，争取在 30 天内友好解决</li>
+    </ul>
+    <p class="i18n" data-key="terms_s11_p2">若协商无法解决争议，双方同意通过具有管辖权的仲裁机构进行约束性仲裁，而非提起集体诉讼。</p>
+    <div class="legal-highlight">
+      <p><span class="i18n" data-key="terms_s11_note">条款变更：我们可能会不时更新本服务条款。重大变更将提前 14 天通过电子邮件通知您。继续使用服务即视为您接受更新后的条款。</span></p>
+    </div>
+  </div>
+
+  <!-- S12 -->
+  <div class="legal-section" id="s12">
+    <div class="legal-section-header"><span class="section-num">12</span><h2 class="i18n" data-key="terms_s12_title">联系我们</h2></div>
+    <p class="i18n" data-key="terms_s12_p1">如对本服务条款有任何疑问，请通过以下方式联系我们：</p>
+    <div class="legal-contact-card">
+      <div class="legal-contact-icon">📋</div>
+      <div class="legal-contact-info">
+        <p><strong style="color:var(--text);" class="i18n" data-key="terms_contact_name">NUNO LLC — 法务团队</strong></p>
+        <p class="i18n" data-key="terms_contact_email">邮件：legal@nuno.app（条款相关事宜）</p>
+        <p class="i18n" data-key="terms_contact_general">一般咨询：hello@nuno.app</p>
+        <p style="color:var(--text3);font-size:12px;margin-top:8px;" class="i18n" data-key="terms_contact_note">工作日内 5 个工作日内回复。</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <a href="index.html" class="nav-logo" style="text-decoration:none;"><div class="nav-logo-mark">N</div><span class="nav-logo-text">NUNO</span></a>
+        <p class="footer-brand-desc i18n" data-key="footer_desc">复杂变简单。为每一个认真做生意的人，打造最贴心的财务工具。</p>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-key="footer_products">产品</h5>
+        <a href="#" class="i18n" data-key="app1_name">水獭能量站</a>
+        <a href="#" class="i18n" data-key="app2_name">獭掌柜·零售版</a>
+        <a href="#" class="i18n" data-key="app3_name">獭掌柜·美业版</a>
+        <a href="#" class="i18n" data-key="app4_name">獭掌柜·餐饮版</a>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-key="footer_company">公司</h5>
+        <a href="#" class="i18n" data-key="footer_about">关于我们</a>
+        <a href="#" class="i18n" data-key="footer_blog">博客</a>
+        <a href="#" class="i18n" data-key="footer_contact">联系</a>
+      </div>
+      <div class="footer-col">
+        <h5 class="i18n" data-key="footer_legal">法律</h5>
+        <a href="privacy.html" class="i18n" data-key="footer_privacy">隐私政策</a>
+        <a href="terms.html" style="color:var(--gold2);" class="i18n" data-key="footer_terms">服务条款</a>
+        <a href="refund.html" class="i18n" data-key="footer_refund">退款政策</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 NUNO LLC. <span class="i18n" data-key="footer_rights">版权所有</span></span>
+      <span class="i18n" data-key="footer_stripe_note">支付由 Stripe 提供安全保障</span>
+    </div>
+  </div>
+</footer>
+<script src="nuno.js"></script>
+</body>
+</html>
