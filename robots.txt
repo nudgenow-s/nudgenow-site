@@ -1,4 +1,4 @@
-# NUNO 主站 Robots.txt - 允许爬虫抓取所有介绍页与主页
+# NUNO 主站 Robots.txt - 允许爬虫抓取所有多语言隐藏介绍页
 User-agent: *
 Allow: /
 Allow: /intro/
@@ -6,9 +6,9 @@ Allow: /privacy.html
 Allow: /terms.html
 Allow: /refund.html
 
-# 隐藏不必要的样式与前端 JS 碎片
+# 隐藏静态样式与底层前端代码
 Disallow: /nuno.css
 Disallow: /nuno.js
 
-# 指向主站正确的 sitemap
+# 指向主站最终站点地图
 Sitemap: https://nudgenow.xyz/sitemap.xml
