@@ -10,37 +10,6 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- 🇨🇳 中文流量拦截页 -->
-  <url>
-    <loc>https://nudgenow.xyz/intro/intro-zh.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 🇺🇸 英文流量拦截页 -->
-  <url>
-    <loc>https://nudgenow.xyz/intro/intro-en.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 🇫🇷 法文流量拦截页 -->
-  <url>
-    <loc>https://nudgenow.xyz/intro/intro-fr.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- 🇻🇳 越南文流量拦截页 -->
-  <url>
-    <loc>https://nudgenow.xyz/intro/intro-vi.html</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
 
   <!-- 法律页面 -->
   <url><loc>https://nudgenow.xyz/privacy.html</loc><priority>0.3</priority></url>

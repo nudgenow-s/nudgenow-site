@@ -1,7 +1,6 @@
 # NUNO 主站 Robots.txt - 允许爬虫抓取所有多语言隐藏介绍页
 User-agent: *
 Allow: /
-Allow: /intro/
 Allow: /privacy.html
 Allow: /terms.html
 Allow: /refund.html
